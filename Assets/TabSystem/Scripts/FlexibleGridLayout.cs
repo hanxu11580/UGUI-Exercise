@@ -11,8 +11,10 @@ public class FlexibleGridLayout : LayoutGroup
     public enum FitType
     {
         None,
-        Width,
-        Height,
+        RowMajor,
+        ColumnMajor,
+        FixedRow,
+        FixedColumn
     }
     public FitType fitType;
     // 行
@@ -32,12 +34,21 @@ public class FlexibleGridLayout : LayoutGroup
         rows = Mathf.CeilToInt(sqrRt);
         columns = Mathf.CeilToInt(sqrRt);
         //根据优先级进行调整
-        if(fitType == FitType.Width)
+        if(fitType == FitType.RowMajor)
         {
             rows = Mathf.CeilToInt(transform.childCount / (float)columns); 
-        }else if(fitType == FitType.Height)
+        }else if(fitType == FitType.ColumnMajor)
         {
             columns = Mathf.CeilToInt(transform.childCount / (float)rows);
+        }else if(fitType == FitType.FixedRow)
+        {
+            rows = 1;
+            columns = transform.childCount;
+        }
+        else if(fitType == FitType.FixedColumn)
+        {
+            rows = transform.childCount;
+            columns = 1;
         }
 
 
