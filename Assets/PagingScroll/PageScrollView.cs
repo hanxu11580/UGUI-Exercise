@@ -5,22 +5,22 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class PageScrollView : MonoBehaviour, IEndDragHandler
+public class PageScrollView : MonoBehaviour, IEndDragHandler,IBeginDragHandler
 {
-    ScrollRect _scrollRect;
+    protected ScrollRect _scrollRect;
     // 总共有几页
     int _pageCount;
     // 根据滑动进度，进行比较，然后设置到显示完全页面的进度
     [SerializeField]float[] _signProgress;
-    [SerializeField]float[] _targetProgress;
+    [SerializeField] protected float[] _targetProgress;
 
     bool _startScroll;
     float _targetVal;
+    protected int _targetIdx;
 
     public float speed;
-    public bool IsStartAutoScroll; //自动滚动
 
-    private void Start()
+    protected virtual void Start()
     {
         _scrollRect = GetComponent<ScrollRect>();
         _pageCount = transform.Find("Viewport/Content").childCount;
@@ -33,27 +33,19 @@ public class PageScrollView : MonoBehaviour, IEndDragHandler
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (_startScroll)
         {
             var value = Mathf.Lerp(_scrollRect.horizontalNormalizedPosition, _targetVal, Time.deltaTime * speed);
-            if(Mathf.Abs(value-_targetVal) < 0.0001f)
+            if(Mathf.Abs(value - _targetVal) < 0.0001f)
             {
+                value = _targetVal;
                 _startScroll = false;
             }
             _scrollRect.horizontalNormalizedPosition = value;
         }
-
-        if (IsStartAutoScroll)
-        {
-            if (_targetProgress.GetEnumerator().MoveNext())
-            {
-                Debug.Log(_targetProgress.GetEnumerator().Current);
-            }
-        }
     }
-
 
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -63,10 +55,16 @@ public class PageScrollView : MonoBehaviour, IEndDragHandler
             var signProgress = _signProgress[i];
             if (value <= signProgress)
             {
+                _targetIdx = i;
                 _targetVal = _targetProgress[i];
                 _startScroll = true;
                 break;
             }
         }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        _startScroll = false;
     }
 }
