@@ -5,3 +5,4 @@
 - [触发式提示框](https://github.com/hanxu11580/UGUI-Exercise/tree/main/Assets/CommonTips)
 - [Tab选项卡以及自定义灵活网格布局](https://github.com/hanxu11580/UGUI-Exercise/tree/main/Assets/TabSystem)
 - [分页滚动、以及滚动Scale动效](https://github.com/hanxu11580/UGUI-Exercise/tree/main/Assets/PagingScroll)
+- [无限滚动列表、加数据模拟](https://github.com/hanxu11580/UGUI-Exercise/tree/main/Assets/Infinite List)
